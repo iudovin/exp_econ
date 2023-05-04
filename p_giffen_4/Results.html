@@ -1,0 +1,30 @@
+{{ block title }}
+    Результаты 4. Раунд {{ player.group.round_number }}
+{{ endblock }}
+
+{{ block content }}
+
+
+<table class="table">
+	<tr>
+		<th>Цена риса</th>
+		<th>Купили риса</th>
+		<th>Съели риса</th>
+		<th>Запасы</th>
+		<th>Заработали за раунд</th>
+		<th>Заработали всего</th>
+	</tr>
+	<tr>
+		<th>{{ group.p_rice_d }}</th>
+		<th>{{ player.x_rice_d }}</th>
+		<th>{{ player.x_rice_ate_d }}</th>
+		<th>{{ player.x_rice_saved_d }}</th>
+		<th>{{ player.utility_d }}</th>
+		<th>{{ player.result_d }}</th>
+	</tr>
+</table>
+
+
+    {{ next_button }}
+{{ endblock }}
+

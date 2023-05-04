@@ -1,0 +1,95 @@
+{{ block title }}
+    Игра 4. Раунд {{ player.group.round_number }}
+{{ endblock }}
+{{ block content }}
+
+
+<table class="table">
+	
+	<tr>
+		<th ></th>
+		<th>&#127834; Рис</th>
+		<th>&#127830; Мясо</th>
+		<th style="text-align: center">Полезность</th>
+	</tr>
+	<tr>
+		<th> У вас есть </th>
+		<th id="u_vas_est_rice">{{ player.x_rice_saved }}</th>
+		<th id="u_vas_est_meat">{{ player.x_meat }}</th>
+		<th id="th_utility" style="text-align:center;vertical-align:middle" rowspan="3"></th>
+	</tr>
+	<tr>
+		<th> Съедено </th>
+	    <th id="th_rice_amt"></th>
+	    <th id="th_meat_amt"></th>
+	</tr>
+	<tr>
+		<th> Останется </th>
+	    <th id="th_rice_will_be_left"></th>
+	    <th>0.0</th>
+	</tr>
+</table>
+
+
+	<p>
+		<input id="inputbox" type="number">
+		<button type="button" onclick="sendValue()">Проверить</button>
+	</p>
+
+	<p id="p_warning" style="color: red"></p>	
+	
+	<p>
+		<button type="button" onclick="trySubmit()">Съесть сегодня</button>
+	</p>
+	
+	<script>
+	  
+  	  	let rice_amt = document.getElementById('th_rice_amt');
+	  	let meat_amt = document.getElementById('th_meat_amt');
+	  	let utility = document.getElementById('th_utility');
+  	  	let inputbox = document.getElementById('inputbox');
+		let warning = document.getElementById('p_warning');
+		let form = document.getElementById('form');
+		let rice_will_be_left = document.getElementById('th_rice_will_be_left');  
+		var can_proceed = false;
+		var inputbox_prev_value;
+		
+		document.getElementById("u_vas_est_rice").innerHTML = Number(({{ player.x_rice_saved }}).toFixed(2));
+		document.getElementById("u_vas_est_meat").innerHTML = Number(({{ player.x_meat }}).toFixed(2));
+		
+
+  	  	function liveRecv(data) {
+			rice_amt.innerHTML = Number((data.rice_amt).toFixed(4));
+			meat_amt.innerHTML = Number((data.meat_amt).toFixed(4));
+			utility.innerHTML = Number((data.utility).toFixed(4));
+			rice_will_be_left.innerHTML = Number((data.rice_will_be_left).toFixed(4));
+			can_proceed = (data.utility > 0);
+		}
+		
+		function sendValue() {
+			liveSend(parseInt(inputbox.value));
+		}
+		
+		function trySubmit() {
+			liveSend(parseInt(inputbox.value));
+			
+			if (!(parseFloat(inputbox.value) >= 0)) {
+				warning.innerHTML = 'Введите неотрицательное число';
+			} else if (!can_proceed) {
+				if (inputbox.value == inputbox_prev_value) {
+					form.submit();
+				} else {
+					warning.innerHTML = 'Проверьте полезность. Если уверены, то нажмите "Купить"';
+					inputbox_prev_value = inputbox.value;
+				}
+			} else {
+				form.submit();
+			}
+		}
+	
+	</script>
+
+
+
+
+{{ endblock }}

@@ -1,0 +1,75 @@
+{{ block title }}
+     Игра 4. Раунд {{ player.group.round_number }}
+{{ endblock }}
+{{ block content }}
+
+	
+
+	<table class="table">
+	<tr>
+	  <th>Цена риса</th>
+	  <th>Риса осталось</th>
+	  <th>Риса куплено</th>
+	  <th>Запасы</th>
+	</tr>
+	  <th>{{ group.p_rice }}</th>
+	  <th id="th_rice_left"></th>
+	  <th id="th_rice_bought">{{ player.x_rice }}</th>
+	  <th id="th_rice_amt">{{ player.x_rice_saved }}</th>
+	<tr>
+	</tr>
+	</table>
+	
+	<p>
+		<input id="inputbox" type="number">
+		<button type="button" onclick="sendValue()">Купить</button>
+	</p>
+	
+	<p id="p_warning" style="color: red"></p>	
+		
+	{{ next_button }}
+	
+	
+	<script>
+
+		//var rice_amt = 0.0;
+		let p_rice_bought = document.getElementById('th_rice_bought');
+  	  	let p_rice_amt = document.getElementById('th_rice_amt');
+		let p_rice_left = document.getElementById('th_rice_left');
+  	  	let inputbox = document.getElementById('inputbox');
+		let warning = document.getElementById('p_warning');
+		
+		
+		p_rice_left.innerHTML = Number(({{ player.group.rice_left }}).toFixed(2));
+		
+
+  	  	function liveRecv(data) {
+			
+			//console.log(data);
+			
+			//p_rice_left.innerHTML = data.rice_avl; 
+			//p_rice_bought.innerHTML = data.player_rice;
+			//p_rice_amt.innerHTML = data.rice_amt;
+			
+			p_rice_bought.innerHTML = Number((data.players_rice[{{ player.id_in_group }}]).toFixed(2));
+			p_rice_left.innerHTML = Number((data.rice_avl).toFixed(2)); 
+			p_rice_amt.innerHTML = Number((data.rice_amt[{{ player.id_in_group }}]).toFixed(2));
+		}
+		
+		function sendValue() {
+			//rice_amt += parseFloat(inputbox.value);
+			
+			if (parseFloat(inputbox.value) >= 0) {
+				warning.innerHTML = '';
+				liveSend(parseInt(inputbox.value));
+			} else {
+				warning.innerHTML = 'Введите неотрицательное число';
+			}
+			
+		}
+
+	</script>
+	
+    
+
+{{ endblock }}

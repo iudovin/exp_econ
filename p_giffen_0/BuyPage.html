@@ -1,0 +1,91 @@
+{{ block title }}
+    Игра 0. Раунд {{ player.group.round_number }}
+{{ endblock }}
+{{ block content }}
+
+
+<table class="table">
+	
+	<tr>
+		<th ></th>
+		<th>&#127834; Рис</th>
+		<th>&#127830; Мясо</th>
+		<th style="text-align: center">Полезность</th>
+	</tr>
+	<tr>
+		<th> Цена </th>
+		<th>{{ player.group.p_rice }}</th>
+		<th>{{ player.group.p_meat }}</th>
+		<th id="th_utility" style="text-align:center;vertical-align:middle" rowspan="3"></th>
+	</tr>
+	<tr>
+		<th>На сколько хватит денег</th>
+		<th>{{ player.max_rice }}</th>
+		<th>&infin;</th>
+		
+	</tr>
+	<tr>
+		<th> Куплено </th>
+	    <th id="th_rice_amt"></th>
+	    <th id="th_meat_amt"></th>
+	</tr>
+</table>
+
+
+	<p>
+		<p>Введите неотрицательное число. При попытке купить риса больше, чем позволяют ваши финансы, будет куплен максимум, на который хватит денег.</p>
+		<input id="inputbox" type="number">
+		<button type="button" onclick="sendValue()">Проверить</button>
+	</p>
+
+	<p id="p_warning" style="color: red"></p>	
+	
+	<p>
+		<button type="button" onclick="trySubmit()">Купить</button>
+	</p>
+
+	<script>
+	  
+  	  	let rice_amt = document.getElementById('th_rice_amt');
+	  	let meat_amt = document.getElementById('th_meat_amt');
+	  	let utility = document.getElementById('th_utility');
+  	  	let inputbox = document.getElementById('inputbox');
+		let warning = document.getElementById('p_warning');
+		let form = document.getElementById('form');
+		var can_proceed = false;
+		var inputbox_prev_value;
+		
+
+  	  	function liveRecv(data) {
+			rice_amt.innerHTML = Number((data.rice_amt).toFixed(4));
+			meat_amt.innerHTML = Number((data.meat_amt).toFixed(4));
+			utility.innerHTML = Number((data.utility).toFixed(4));
+			can_proceed = (data.utility > 0);
+		}
+		
+		function sendValue() {
+			liveSend(parseInt(inputbox.value));
+		}
+		
+		function trySubmit() {
+			
+			liveSend(parseInt(inputbox.value));
+			
+			if (!(parseFloat(inputbox.value) >= 0)) {
+				warning.innerHTML = 'Введите неотрицательное число';
+			} else if (!can_proceed) {
+				if (inputbox.value == inputbox_prev_value) {
+					form.submit();
+				} else {
+					warning.innerHTML = 'Проверьте полезность. Если уверены, то нажмите "Купить"';
+					inputbox_prev_value = inputbox.value;
+				}
+			} else {
+				form.submit();
+			}
+						
+		}
+	
+	</script>
+   
+{{ endblock }}
