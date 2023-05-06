@@ -10,7 +10,7 @@ doc = """
 class C(BaseConstants):
     NAME_IN_URL = 'p_giffen_3'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 3
+    NUM_ROUNDS = 7
     PLAYER_INCOME = 300000
     a = 20
     b = 1500
@@ -80,10 +80,16 @@ class StartPage(WaitPage):
         group.eq_rice = eq_rice_amount(group.round_number, group.p_meat)
         for pl in p:
             pl.max_rice = round(C.PLAYER_INCOME / group.p_rice, 2)
+            if pl.round_number > 1:
+                p_prev = pl.in_round(pl.round_number - 1)
+                pl.x_rice_saved += p_prev.x_rice_saved
+            pl.x_rice_saved_d = round(pl.x_rice_saved,2)
 
 
 class BuyPage(Page):
-    timeout_seconds = 60
+    @staticmethod
+    def get_timeout_seconds(group: Group):
+        return 90 if group.round_number==1 else 60
     
     def live_method(player, x):
         group = player.group
@@ -116,14 +122,17 @@ class ResultsWaitPage1(WaitPage):
             p.x_rice_actual = p.x_rice
             if group.rice_bought > group.rice_left:
                 p.x_rice_actual *= group.rice_left / group.rice_bought
-            if p.round_number > 1:
-                p_prev = p.in_round(p.round_number - 1)
-                p.x_rice_saved += p_prev.x_rice_saved
+            #if p.round_number > 1:
+            #    p_prev = p.in_round(p.round_number - 1)
+            #    p.x_rice_saved += p_prev.x_rice_saved
             p.x_rice_saved += p.x_rice_actual
+            p.x_rice_actual_d = round(p.x_rice_actual,2)
                 
 
 class SavePage(Page):
-    timeout_seconds = 60
+    @staticmethod
+    def get_timeout_seconds(group: Group):
+        return 120 if group.round_number==1 else 60
 
     def live_method(player, x):
         group = player.group
@@ -159,7 +168,10 @@ class ResultsWaitPage2(WaitPage):
             p.x_rice_ate_d = round(p.x_rice, 2)
             p.x_rice_saved_d = round(p.x_rice_saved, 2)
             p.utility_d = round(p.utility, 2)
-            p.result_d = round(p.result_d, 2)
+            p.result_d = round(p.result, 2)
+            
+            p.payoff = p.result * 1e2
+            p.participant.result = p.result
 
 
 class Results(Page):

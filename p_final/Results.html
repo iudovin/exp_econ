@@ -1,10 +1,33 @@
 {{ block title }}
-    Page title
+    Результаты
 {{ endblock }}
 
 {{ block content }}
 
-    {{ next_button }}
+
+<table class="table" id="results">
+	<tr>
+		<th>Игрок</th>
+		<th>Результат</th>
+	</tr>
+	
+</table>
+	
+<script>
+	
+  let results = document.getElementById('results');
+    
+  for (let i = 0; i < {{ n_players }}; i++) {
+	  console.log(i);
+	  results.innerHTML += '<tr><td>' + {{ names }}[i] + '</td><td>' + Number(({{ results }}[i]).toFixed(2)) + '</td></tr>';
+  }
+  
+  
+  console.log({{ participant.vars }})
+	
+</script>
+
+
 {{ endblock }}
 
 

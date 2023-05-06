@@ -21,13 +21,17 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    name = models.StringField(label='Введите ФИО')
+    name = models.StringField(label='Введите фамилию и имя')
 
 
 # PAGES
 class Survey(Page):
     form_model = 'player'
     form_fields = ['name']
+    
+    @staticmethod
+    def before_next_page(player, timeout_happened):
+        player.participant.name = player.name
 
 
 

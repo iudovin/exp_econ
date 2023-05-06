@@ -2,33 +2,28 @@ from os import environ
 
 SESSION_CONFIGS = [
     dict(
-         name='p_giffen_0',
-         #app_sequence=['p_survey', 'p_instruction_0', 'p_giffen_0'],
-         app_sequence=['p_giffen_0'],
+         name='game0',
+         app_sequence=['p_survey', 'p_instruction_0', 'p_giffen_0', 'p_final'],
          num_demo_participants=2,
     ),
     dict(
-         name='p_giffen_1',
-         #app_sequence=['p_survey', 'p_instruction_1', 'p_giffen_1'],
-         app_sequence=['p_giffen_1'],
+         name='game1',
+         app_sequence=['p_survey', 'p_instruction_1', 'p_giffen_1', 'p_final'],
          num_demo_participants=4,
     ),
     dict(
-         name='p_giffen_2',
-         #app_sequence=['p_survey', 'p_giffen_2'],
-         app_sequence=['p_giffen_2'],
+         name='game2',
+         app_sequence=['p_survey', 'p_instruction_2', 'p_giffen_2', 'p_final'],
          num_demo_participants=2,
     ),
     dict(
-         name='p_giffen_3',
-         #app_sequence=['p_survey', 'p_giffen_3'],
-         app_sequence=['p_giffen_3'],
+         name='game3',
+         app_sequence=['p_survey', 'p_instruction_3', 'p_giffen_3', 'p_final'],
          num_demo_participants=2,
     ),
     dict(
-         name='p_giffen_4',
-         #app_sequence=['p_survey', 'p_giffen_4'],
-         app_sequence=['p_giffen_4'],
+         name='game4',
+         app_sequence=['p_survey', 'p_instruction_4', 'p_giffen_4', 'p_final'],
          num_demo_participants=2,
     )
 ]
@@ -42,7 +37,7 @@ SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=1.00, participation_fee=0.00, doc=""
 )
 
-PARTICIPANT_FIELDS = []
+PARTICIPANT_FIELDS = ['name', 'result']
 SESSION_FIELDS = []
 
 # ISO-639 code

@@ -4,6 +4,9 @@
 {{ block content }}
 
 
+<p>Вы купили <b>{{ player.x_rice_actual_d }}</b> риса</p>
+
+
 <table class="table">
 	
 	<tr>
@@ -56,13 +59,14 @@
 		
 		document.getElementById("u_vas_est_rice").innerHTML = Number(({{ player.x_rice_saved }}).toFixed(2));
 		document.getElementById("u_vas_est_meat").innerHTML = Number(({{ player.x_meat }}).toFixed(2));
+		//document.getElementById("rice_bought").innerHTML = Number(({{ player.x_meat }}).toFixed(2));
 		
 
   	  	function liveRecv(data) {
-			rice_amt.innerHTML = Number((data.rice_amt).toFixed(4));
-			meat_amt.innerHTML = Number((data.meat_amt).toFixed(4));
+			rice_amt.innerHTML = Number((data.rice_amt).toFixed(2));
+			meat_amt.innerHTML = Number((data.meat_amt).toFixed(2));
 			utility.innerHTML = Number((data.utility).toFixed(4));
-			rice_will_be_left.innerHTML = Number((data.rice_will_be_left).toFixed(4));
+			rice_will_be_left.innerHTML = Number((data.rice_will_be_left).toFixed(2));
 			can_proceed = (data.utility > 0);
 		}
 		

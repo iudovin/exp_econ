@@ -10,7 +10,7 @@ doc = """
 class C(BaseConstants):
     NAME_IN_URL = 'p_giffen_2'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 3
+    NUM_ROUNDS = 7
     PLAYER_INCOME = 300000
     a = 20
     b = 1500
@@ -79,7 +79,9 @@ class StartPage(WaitPage):
 
 
 class BuyPage(Page):
-    timeout_seconds = 90
+    @staticmethod
+    def get_timeout_seconds(group: Group):
+        return 120 if group.round_number==1 else 60
     
     def live_method(player, x):
         group = player.group
@@ -123,6 +125,9 @@ class ResultsWaitPage(WaitPage):
             p.x_rice_actual_d = round(p.x_rice_actual, 2)
             p.utility_d = round(p.utility, 2)
             p.result_d = round(p.result, 2)
+            
+            p.payoff = p.result * 1e2
+            p.participant.result = p.result
 
 
 class Results(Page):

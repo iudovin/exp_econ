@@ -10,7 +10,7 @@ doc = """
 class C(BaseConstants):
     NAME_IN_URL = 'p_giffen_4'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 3
+    NUM_ROUNDS = 7
     PLAYER_INCOME = 300000
     a = 20
     b = 1500
@@ -57,6 +57,7 @@ class Player(BasePlayer):
     x_rice_d = models.FloatField(initial=0)
     x_rice_ate_d = models.FloatField(initial=0)
     x_rice_bought = models.FloatField(initial=0)
+    x_rice_bought_d = models.FloatField(initial=0)
     x_rice_saved = models.FloatField(initial=0)
     x_rice_saved_d = models.FloatField(initial=0)
     x_meat = models.FloatField(initial=0)
@@ -81,6 +82,8 @@ class StartPage(WaitPage):
             if pl.round_number > 1:
                 p_prev = pl.in_round(pl.round_number - 1)
                 pl.x_rice_saved += p_prev.x_rice_saved
+            pl.x_rice_saved_d = round(pl.x_rice_saved,2)
+            
 
 
 class CheckPage(Page):
@@ -109,7 +112,7 @@ class QueuePage(WaitPage):
 
 class BuyPage(Page):
     
-    timeout_seconds = 60
+    #timeout_seconds = 60
         
     def live_method(player, x):
         group = player.group
@@ -138,7 +141,8 @@ class BuyPage(Page):
         return {0: dict(
             rice_amt=[0]+[(p.x_rice_saved+p.x_rice) for p in group.get_players()], 
             rice_avl=group.rice_left, 
-            players_rice=[0]+[p.x_rice for p in group.get_players()]
+            players_rice=[0]+[p.x_rice for p in group.get_players()],
+            player_max_rice=[0]+[p.max_rice for p in group.get_players()]
         )}
 
 
@@ -157,10 +161,11 @@ class ResultsWaitPage1(WaitPage):
         for p in group.get_players():
             p.x_rice_bought = p.x_rice
             p.x_meat = max(0, (C.PLAYER_INCOME - p.x_rice*group.p_rice) / group.p_meat)
-            if p.round_number > 1:
-                p_prev = p.in_round(p.round_number - 1)
-                p.x_rice_saved += p_prev.x_rice_saved
+            #if p.round_number > 1:
+            #    p_prev = p.in_round(p.round_number - 1)
+            #    p.x_rice_saved += p_prev.x_rice_saved
             p.x_rice_saved += p.x_rice_bought
+            p.x_rice_bought_d = round(p.x_rice_bought,2)
                 
 
 class SavePage(Page):
@@ -199,7 +204,10 @@ class ResultsWaitPage2(WaitPage):
             p.x_rice_ate_d = round(p.x_rice, 2)
             p.x_rice_saved_d = round(p.x_rice_saved, 2)
             p.utility_d = round(p.utility, 2)
-            p.result_d = round(p.result_d, 2)
+            p.result_d = round(p.result, 2)
+            
+            p.payoff = p.result * 1e2
+            p.participant.result = p.result
 
 
 class Results(Page):

@@ -1,0 +1,20 @@
+{{ block title }}
+    Конец этапа {{ step }}
+{{ endblock }}
+
+{{ block content }}
+
+{% if player.round_number < C.NUM_ROUNDS %}
+
+<p>Нажмите, чтобы перейти к следующему этапу игры.</p>
+
+{% else %}
+
+<p>Нажмите, чтобы перейти к результатам.</p>
+
+{% endif %}
+
+    {{ next_button }}
+{{ endblock }}
+
+

@@ -4,6 +4,8 @@
 {{ block content }}
 
 
+<p>Вы купили <b>{{ player.x_rice_bought_d }}</b> риса</p>
+
 <table class="table">
 	
 	<tr>
@@ -59,10 +61,10 @@
 		
 
   	  	function liveRecv(data) {
-			rice_amt.innerHTML = Number((data.rice_amt).toFixed(4));
-			meat_amt.innerHTML = Number((data.meat_amt).toFixed(4));
+			rice_amt.innerHTML = Number((data.rice_amt).toFixed(2));
+			meat_amt.innerHTML = Number((data.meat_amt).toFixed(2));
 			utility.innerHTML = Number((data.utility).toFixed(4));
-			rice_will_be_left.innerHTML = Number((data.rice_will_be_left).toFixed(4));
+			rice_will_be_left.innerHTML = Number((data.rice_will_be_left).toFixed(2));
 			can_proceed = (data.utility > 0);
 		}
 		

@@ -13,7 +13,7 @@
 	</tr>
 	<tr>
 		<th> Цена </th>
-		<th>{{ player.group.p_rice }}</th>
+		<th id="rice_price">{{ player.group.p_rice }}</th>
 		<th>{{ player.group.p_meat }}</th>
 		<th id="th_utility" style="text-align:center;vertical-align:middle" rowspan="4"></th>
 	</tr>
@@ -60,10 +60,12 @@
 		var can_proceed = false;
 		var inputbox_prev_value;
 		
+		document.getElementById('rice_price').innerHTML = Number(( {{ player.group.p_rice }} ).toFixed(2));
+		
 
   	  	function liveRecv(data) {
-			rice_amt.innerHTML = Number((data.rice_amt).toFixed(4));
-			meat_amt.innerHTML = Number((data.meat_amt).toFixed(4));
+			rice_amt.innerHTML = Number((data.rice_amt).toFixed(2));
+			meat_amt.innerHTML = Number((data.meat_amt).toFixed(2));
 			utility.innerHTML = Number((data.utility).toFixed(4));
 			can_proceed = (data.utility > 0);
 		}

@@ -25,16 +25,16 @@ class Player(BasePlayer):
 
 
 # PAGES
-class MyPage(Page):
-    pass
-
-
-class ResultsWaitPage(WaitPage):
-    pass
-
 
 class Results(Page):
-    pass
+   @staticmethod
+   def vars_for_template(player: Player):
+       group = player.group
+       return dict(
+           n_players=len(group.get_players()),
+           names=[p.participant.name for p in group.get_players()],
+           results=[p.participant.result for p in group.get_players()]
+       )
 
 
-page_sequence = [MyPage, ResultsWaitPage, Results]
+page_sequence = [Results]

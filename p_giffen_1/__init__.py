@@ -10,7 +10,7 @@ doc = """
 class C(BaseConstants):
     NAME_IN_URL = 'p_giffen_1'
     PLAYERS_PER_GROUP = None
-    ROUNDS_PER_DELTA = 2
+    ROUNDS_PER_DELTA = 7
     NUM_ROUNDS = 3 * ROUNDS_PER_DELTA
     PLAYER_INCOME = 300000
     a = 20
@@ -102,7 +102,7 @@ class StartPage(WaitPage):
 
 
 class BuyPage(Page):
-    timeout_seconds = 90
+    timeout_seconds = 60
     
     def live_method(player, x):
         if x < 0:
@@ -154,13 +154,28 @@ class ResultsWaitPage(WaitPage):
                 p_prev = p.in_round(p.round_number - 1)
                 p.result += p_prev.result
             p.x_rice_d = round(p.x_rice,2)
+            p.x_rice_actual_d = round(p.x_rice_actual,2)
             p.utility_d = round(p.utility,2)
             p.result_d = round(p.result,2)
+            
+            p.payoff = p.result * 1e2
+            p.participant.result = p.result
     
 
 
 class Results(Page):
     timeout_seconds = 10
+    
+class BlockResults(Page):
+    timeout_seconds = 20
+    
+    @staticmethod
+    def is_displayed(player):
+        return True if (player.round_number % C.ROUNDS_PER_DELTA == 0) else False
+        
+    @staticmethod
+    def vars_for_template(player):
+        return dict(step=(player.round_number-1) // C.ROUNDS_PER_DELTA + 1)
 
 
-page_sequence = [StartPage, BuyPage, ResultsWaitPage, Results]
+page_sequence = [StartPage, BuyPage, ResultsWaitPage, Results, BlockResults]
